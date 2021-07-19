@@ -20,8 +20,7 @@ const Home = () => {
                 setProducts(data);
                 if (page < 3) {
                     setPage(page + 1);
-                } 
-                
+                }
             })
     }, [])
 
@@ -31,10 +30,12 @@ const Home = () => {
             .then(data => {
                 if (products.length > 0) {
                     setProducts([...products, ...data]);
-                    if (page < 20) {
+                    if (page <= 25) {
                         setPage(page + 1);
                         setLoadingDiv(!loadingDiv)
-                        console.log( page)
+                    }else{
+                        setPage(page)
+                        setLoadingDiv(false);
                     }
                 }
             })
@@ -52,9 +53,15 @@ const Home = () => {
             window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight
         ) {
             scrollToEnd()
-            setLoadingDiv(!loadingDiv)
+            if (products.length < 500) {
+                setLoadingDiv(!loadingDiv)
+            }else{
+                setLoadingDiv(false);
+            }
         }
     }
+    
+    console.log(page, products)
 
     return (
         <div >
@@ -77,10 +84,14 @@ const Home = () => {
                         }
                     </div>
 
-                    <div>
+                    <div className="text-center">
                         {loadingDiv && (
-                            <img src={loadingImg} alt="" />)
+                            <img src={loadingImg} alt="" />) 
                         }
+                        {
+                            products.length === 500 && <p className="text-white">~ end of catalogue ~</p>
+                        }
+
                     </div>
                 </section>
             </div>
